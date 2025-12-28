@@ -13,6 +13,7 @@ Jinja2==3.1.4
 lxml==5.3.0
 maltego-trx==1.6.1
 MarkupSafe==3.0.2
+pillow==12.0.0
 pyaes==1.6.1
 pycparser==2.22
 Pyrogram @ git+https://github.com/KurimuzonAkuma/pyrogram.git@d4d5a2d316719f6e98de87246cf4c573994d728d

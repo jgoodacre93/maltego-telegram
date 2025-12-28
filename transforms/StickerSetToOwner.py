@@ -2,7 +2,7 @@ from maltego_trx.transform import DiscoverableTransform
 from maltego_trx.maltego import MaltegoMsg, MaltegoTransform
 from settings import app, loop
 from extensions import registry
-from utils import fetch_web_info
+from utils import fetch_web_info, get_default_photo_b64
 
 from pyrogram import Client
 from pyrogram.raw import types, functions
@@ -72,6 +72,7 @@ class StickerSetToOwner(DiscoverableTransform):
         else:
             stickerset_owner_entity.addProperty("properties.id", value=owner.id)
             stickerset_owner_entity.addProperty("properties.full_name", value=owner.id)
+            stickerset_owner_entity.addProperty("base64", value=get_default_photo_b64(owner.id))
 
         stickerset_owner_entity.setLinkColor("0xB5E61D")
         stickerset_owner_entity.setLinkThickness(2)

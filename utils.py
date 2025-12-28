@@ -6,8 +6,37 @@ import logging
 from maltego_trx.maltego import MaltegoEntity
 
 from lxml import html
+import base64
+from io import BytesIO
+from PIL import Image
 
 from settings import bot_token
+
+
+PALETTE = [
+    "#d45246",  # Red
+    "#46ba43",  # Green
+    "#e5ca77",  # Yellow
+    "#408acf",  # Blue
+    "#6c61df",  # Purple
+    "#d95574",  # Pink
+    "#359ad4",  # Sea
+    "#f68136",  # Orange
+]
+
+MAP = [0, 7, 4, 1, 6, 3, 5]
+
+def get_color(profile_id) -> str:
+    return PALETTE[MAP[abs(profile_id) % len(MAP)]]
+
+def get_default_photo_b64(profile_id, size: int = 2) -> str:
+    color = get_color(profile_id)
+    
+    img = Image.new("RGB", (size, size), color)
+    buffer = BytesIO()
+    img.save(buffer, format="PNG")
+    
+    return base64.b64encode(buffer.getvalue()).decode("utf-8")
 
 
 def message_is_forwarded_from_another_chat(message, username):
@@ -92,6 +121,9 @@ def process_profile_entity(profile):
         profile_entity.addProperty("properties.photo", value=user_info["photo"])
     else:
         profile_entity = MaltegoEntity("interlinked.telegram.UserProfile", value=profile.id)
+
+    if not user_info["photo"]:
+        profile_entity.addProperty("base64", value=get_default_photo_b64(profile.id))
 
     profile_entity.addProperty("properties.id", value=profile.id)
 

@@ -1,5 +1,5 @@
 from maltego_trx.transform import DiscoverableTransform
-from maltego_trx.maltego import MaltegoMsg, MaltegoTransform
+from maltego_trx.maltego import MaltegoMsg, MaltegoTransform, OverlayPosition, OverlayType
 from settings import app, loop, bot_token
 from extensions import registry
 
