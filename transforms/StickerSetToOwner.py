@@ -30,7 +30,7 @@ async def fetch_sticker_set_owner(short_name: str):
                 return owner
 
         try:
-            inline_search = await app.get_inline_bot_results("TgDBSearchBot", str(owner_id))
+            inline_search = await app.get_inline_bot_results("tgdb_search_bot", str(owner_id))
         except Exception:
             return User(id=owner_id)
 
