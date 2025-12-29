@@ -31,6 +31,18 @@ class Video:
             props[name] = value
         return props
 
+    async def encode_thumbnail(self, app) -> None:
+        if not self.thumbs:
+            self.thumbnail_b64 = None
+            return
+
+        file = await app.download_media(self.thumbs[0], in_memory=True)
+        if not file:
+            self.thumbnail_b64 = None
+            return
+
+        self.thumbnail_b64 = base64.b64encode(file.getbuffer()).decode()
+
 
 async def encode_thumbnail(file_id):
     file = await app.download_media(file_id, in_memory=True)
@@ -47,7 +59,7 @@ async def fetch_videos(username):
         async for message in app.get_chat_history(username, limit=limit):
             if message.video and not message_is_forwarded_from_another_chat(message, username):
                 video = Video(original=message.video, url=f"https://t.me/{username}/{message.id}")
-                video.thumbnail_b64 = await encode_thumbnail(video.thumbs[0])
+                await video.encode_thumbnail(app)
                 videos.append(video)
 
     return videos
